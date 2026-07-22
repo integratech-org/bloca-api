@@ -51,4 +51,4 @@ COPY . .
 EXPOSE 8000
 
 # Run Gunicorn as the production WSGI server.
-CMD ["gunicorn", "config.asgi:application", "-k", "uvicorn_worker.UvicornWorker"]
+CMD ["gunicorn", "config.asgi:application", "-k", "uvicorn_worker.UvicornWorker", "-b", "0.0.0.0:8000"]
