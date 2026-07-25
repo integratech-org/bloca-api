@@ -1,87 +1,42 @@
-# bloca-api
+# Bloca Backend API (`bloca-api`)
 
-Backend API service for BLOCA, built with Django + Django Ninja Extra.
+Part of the **BLOCA** ecosystem — an IoT-monitored plastic-to-brick compactor with machine learning-based grading.
 
-## Tech stack
+`bloca-api` is the core backend service powering compactor data collection, telemetry ingestion, user authentication, and coordination with machine learning grading pipelines.
 
-- Python 3.14
-- Django 6
-- Django Ninja + Ninja Extra
-- django-allauth (headless mode)
-- PostgreSQL
-- uv (dependency and environment management)
+## Features
 
-## Prerequisites
+- **Telemetry Ingestion:** High-throughput endpoints for IoT compactor sensor data (pressure, load, temperature, cycle stats).
+- **Compactor & Device Management:** CRUD operations and state management for connected compaction hardware.
+- **Authentication & Authorization:** Secure headless authentication powered by `django-allauth` and Django Ninja.
+- **API Framework:** High-performance typed REST APIs using Django Ninja.
 
-- Python 3.14
-- [uv](https://docs.astral.sh/uv/)
-- PostgreSQL (or Docker Compose)
+## Tech Stack
 
-## Environment variables
+- **Language:** Python >= 3.14
+- **Framework:** Django 6 & Django Ninja
+- **Database:** PostgreSQL (`psycopg`)
+- **Server:** Uvicorn / Gunicorn
+- **Tooling:** `uv` (dependency management), Ruff (linting), Mypy (type checking)
 
-Create `.env` from `.env.example`:
+## Project Structure
 
-```bash
-cp .env.example .env
+```text
+bloca-api/
+├── apps/
+│   └── example/      # Core domain models, controllers, and services
+├── config/
+│   ├── api.py        # Django Ninja API router setup
+│   ├── settings.py   # Django project settings
+│   ├── urls.py       # Root URL configuration
+│   └── wsgi.py / asgi.py
+├── manage.py
+├── main.py           # Application entry point
+└── pyproject.toml
 ```
 
-Required variables:
+## Related Repositories
 
-- `DEBUG`
-- `SECRET_KEY`
-- `DATABASE_URL`
-- `POSTGRES_DB`
-- `POSTGRES_USER`
-- `POSTGRES_PASSWORD`
-
-## Local development (uv)
-
-```bash
-# install dependencies
-uv sync
-
-# run migrations
-uv run python manage.py migrate
-
-# start API server
-uv run python manage.py runserver
-```
-
-The app will be available at `http://localhost:8000`.
-
-## Docker Compose development
-
-```bash
-docker compose up --build
-```
-
-This starts:
-
-- `django` on port `8000`
-- `postgres` on port `5432`
-
-## Project structure
-
-```txt
-apps/
-  example/      # sample app/controller/service/model
-config/
-  settings.py   # Django settings and env wiring
-  urls.py       # root URL config
-  api.py        # Ninja API registration
-manage.py       # Django management entrypoint
-```
-
-## API routes (current)
-
-- `GET /api/example/hello`
-- Django admin: `/admin/`
-- allauth routes: `/accounts/` and `/_allauth/`
-
-## Quality checks
-
-```bash
-uv run ruff check .
-uv run ruff format .
-uv run mypy .
-```
+- [`bloca-admin`](https://github.com/integratech-org/bloca-admin) - Admin dashboard web UI
+- [`bloca-firmware`](https://github.com/integratech-org/bloca-firmware) - IoT firmware sources
+- [`bloca-ml`](https://github.com/integratech-org/bloca-ml) - Machine learning grading service
