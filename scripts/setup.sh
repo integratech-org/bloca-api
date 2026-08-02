@@ -71,12 +71,13 @@ check_requirements() {
 
   local has_errors=false
 
-  # Check UV (optional but recommended)
+  # Check UV
   if command_exists uv; then
     print_success "UV package manager available"
   else
     print_warning "UV not installed"
     print_info "Install with: curl -LsSf https://astral.sh/uv/install.sh | sh"
+    has_errors=true
   fi
 
   # Check Make (optional)
