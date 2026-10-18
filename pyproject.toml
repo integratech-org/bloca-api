@@ -26,4 +26,11 @@ dev = [
 ]
 
 [tool.mypy]
-plugins = ["pydantic.mypy"]
+plugins = ["mypy_django_plugin.main", "pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["environ.*", "allauth.*"]
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "config.settings"
