@@ -40,8 +40,13 @@ repos:
       - id: mypy
         additional_dependencies:
           - django-stubs
+          - django-allauth
+          - django-cors-headers
+          - django-environ
+          - django-ninja-extra
+          - psycopg[binary]
           - pydantic
-        args: [--ignore-missing-imports, --no-strict-optional]
+        args: [--ignore-missing-imports, --show-traceback]
 
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v4.4.0
