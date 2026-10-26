@@ -8,15 +8,21 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
-import environ
 import os
-
 from pathlib import Path
+
+import environ
 
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
     REDIS_URL=(str, "redis://localhost:6379"),
+    MQTT_SERVER=(str, "broker.emqx.io"),
+    MQTT_PORT=(int, 1883),
+    MQTT_KEEPALIVE=(int, 60),
+    MQTT_USER=(str, ""),
+    MQTT_PASSWORD=(str, ""),
+    MQTT_CA_CERTS=(str, ""),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -136,6 +142,12 @@ CHANNEL_LAYERS = {
     },
 }
 
+MQTT_SERVER = env("MQTT_SERVER")
+MQTT_PORT = env("MQTT_PORT")
+MQTT_KEEPALIVE = env("MQTT_KEEPALIVE")
+MQTT_USER = env("MQTT_USER")
+MQTT_PASSWORD = env("MQTT_PASSWORD")
+MQTT_CA_CERTS = env("MQTT_CA_CERTS")
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
