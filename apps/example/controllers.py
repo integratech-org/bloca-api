@@ -1,6 +1,7 @@
+from django_eventstream import send_event
 from ninja import Schema
-from ninja_extra import api_controller, http_get, http_post
 from ninja.responses import Response
+from ninja_extra import api_controller, http_get, http_post
 
 from config import client
 
@@ -28,3 +29,8 @@ class ExampleController:
         info = client.publish(data.topic, data.msg, qos=1)
         info.wait_for_publish(timeout=5)
         return {"code": info.rc}
+
+    @http_post("/emit")
+    def emit(self):
+        send_event("telemetry", "message", {"pressure": 42})
+        return {"ok": True}

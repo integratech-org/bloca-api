@@ -55,6 +55,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "ninja_extra",
     # ###
+    # sse
+    # ###
+    "django_eventstream",
+    # ###
     # cors
     # ###
     "corsheaders",
@@ -70,6 +74,7 @@ INSTALLED_APPS = [
     # apps
     # ###
     "apps.example",
+    "apps.telemetry",
     "apps.users",
 ]
 

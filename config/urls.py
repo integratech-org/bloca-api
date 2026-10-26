@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+import django_eventstream
 from django.contrib import admin
 from django.urls import include, path
 
@@ -25,4 +26,5 @@ urlpatterns = [
     path("api/", api.urls),
     path("accounts/", include("allauth.urls")),
     path("_allauth/", include("allauth.headless.urls")),
+    path("events/", include(django_eventstream.urls), {"channels": ["telemetry"]}),
 ]
