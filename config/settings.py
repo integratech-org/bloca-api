@@ -64,8 +64,10 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.headless",
-    # "allauth.socialaccount",
-    # "allauth.socialaccount.providers.google",
+    # ###
+    # role permissions
+    # ###
+    "rolepermissions",
     # ###
     # apps
     # ###
@@ -122,6 +124,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_USER_MODEL = "users.User"
+
+ROLEPERMISSIONS_MODULE = "config.roles"
 
 ACCOUNT_ADAPTER = "apps.users.adapter.MyAccountAdapter"
 
