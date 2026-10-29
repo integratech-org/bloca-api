@@ -71,7 +71,6 @@ INSTALLED_APPS = [
     # ###
     # apps
     # ###
-    "apps.example",
     "apps.users",
 ]
 
