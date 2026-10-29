@@ -17,12 +17,18 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
     REDIS_URL=(str, "redis://localhost:6379"),
-    MQTT_SERVER=(str, "broker.emqx.io"),
+    MQTT_SERVER=(str, ""),
     MQTT_PORT=(int, 1883),
     MQTT_KEEPALIVE=(int, 60),
     MQTT_USER=(str, ""),
     MQTT_PASSWORD=(str, ""),
     MQTT_CA_CERTS=(str, ""),
+    SMTP_HOST=(str, "localhost"),
+    SMTP_PORT=(int, 1025),
+    SMTP_USER=(str, ""),
+    SMTP_PASSWORD=(str, ""),
+    SMTP_USE_TLS=(bool, True),
+    EMAIL_FROM=(str, "BLOCA <noreply@example.com>"),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -89,12 +95,6 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS")
 CORS_ALLOW_CREDENTIALS = True
 
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#
-#     }
-# }
-
 HEADLESS_MODE = True
 HEADLESS_SERVE_SPECIFICATION = True
 
@@ -133,6 +133,22 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_LOGIN_METHODS = {"email"}
+
+MAILERS = {
+    "default": {
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": env("SMTP_HOST"),
+            "port": env("SMTP_PORT"),
+            "use_tls": env("SMTP_USE_TLS"),
+            # port is not needed: it defaults to 587 with use_tls True.
+            "username": env("SMTP_USER"),
+            "password": env("SMTP_PASSWORD"),
+        },
+    },
+}
+
+DEFAULT_FROM_EMAIL = env("EMAIL_FROM")
 
 WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
