@@ -32,6 +32,7 @@ dependencies = [
     { name = "django-environ" },
     { name = "django-ninja" },
     { name = "django-ninja-extra" },
+    { name = "django-role-permissions" },
     { name = "gunicorn" },
     { name = "paho-mqtt" },
     { name = "psycopg", extra = ["binary"] },
@@ -57,6 +58,7 @@ requires-dist = [
     { name = "django-environ", specifier = ">=0.14.0" },
     { name = "django-ninja", specifier = ">=1.6.2" },
     { name = "django-ninja-extra", specifier = ">=0.31.5" },
+    { name = "django-role-permissions", specifier = ">=3.2.0" },
     { name = "gunicorn", specifier = ">=26.0.0" },
     { name = "paho-mqtt", specifier = ">=2.1.0" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.3.4" },
@@ -581,6 +583,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ef/7f/d462683fae69ccd6526678d3013da1ffb3cd58e8f1a9ad6396aeb1cc07d1/django_ninja_extra-0.31.5.tar.gz", hash = "sha256:c687557580f7d59698786ac78e1860e7bafccf6a662e453ff579ae13a9b15e48", size = 62847, upload-time = "2026-06-14T15:05:27.983Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a2/19/5a50a048dfeb653d2ec3f425edf258a6137c00f156560ae4ad87834188fc/django_ninja_extra-0.31.5-py3-none-any.whl", hash = "sha256:a2a38266ef35582e1eea802009893c0889fea688cf30f89e32a389431ebdd7b0", size = 84152, upload-time = "2026-06-14T15:05:26.808Z" },
+]
+
+[[package]]
+name = "django-role-permissions"
+version = "3.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c7/5b/c2b85791ca63f846ecc33561b9e486cccd8ee3cee906ec694c4e3b7b3f7d/django-role-permissions-3.2.0.tar.gz", hash = "sha256:5a89eaa098f3da951b4633e655d5f3188f3d6ec5f0b846a8b1690d094ddc6ea6", size = 16479, upload-time = "2023-06-09T20:31:32.42Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/21/03/baa0d85a7b82bf8fa02f31627d789f39245841975717fd93a973f1a35afc/django_role_permissions-3.2.0-py3-none-any.whl", hash = "sha256:39c4237e9ed2983c0d7fa38bd7f7c4942a04daac739d5be1921efccb074a0606", size = 12782, upload-time = "2023-06-09T20:31:30.853Z" },
 ]
 
 [[package]]
