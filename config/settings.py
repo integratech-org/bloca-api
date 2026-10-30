@@ -17,12 +17,6 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
     REDIS_URL=(str, "redis://localhost:6379"),
-    MQTT_SERVER=(str, ""),
-    MQTT_PORT=(int, 1883),
-    MQTT_KEEPALIVE=(int, 60),
-    MQTT_USER=(str, ""),
-    MQTT_PASSWORD=(str, ""),
-    MQTT_CA_CERTS=(str, ""),
     SMTP_HOST=(str, "localhost"),
     SMTP_PORT=(int, 1025),
     SMTP_USER=(str, ""),
@@ -160,13 +154,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
-MQTT_SERVER = env("MQTT_SERVER")
-MQTT_PORT = env("MQTT_PORT")
-MQTT_KEEPALIVE = env("MQTT_KEEPALIVE")
-MQTT_USER = env("MQTT_USER")
-MQTT_PASSWORD = env("MQTT_PASSWORD")
-MQTT_CA_CERTS = env("MQTT_CA_CERTS")
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases

@@ -46,7 +46,6 @@ repos:
           - django-environ
           - django-ninja-extra
           - django-role-permissions
-          - paho-mqtt
           - psycopg[binary]
           - pydantic
         args: [--ignore-missing-imports, --show-traceback]
