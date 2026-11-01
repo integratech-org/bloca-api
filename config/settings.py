@@ -23,6 +23,11 @@ env = environ.Env(
     SMTP_PASSWORD=(str, ""),
     SMTP_USE_TLS=(bool, True),
     EMAIL_FROM=(str, "BLOCA <noreply@example.com>"),
+    S3_ACCESS_KEY_ID=(str, ""),
+    S3_SECRET_ACCESS_KEY=(str, ""),
+    S3_BUCKET_NAME=(str, ""),
+    S3_ENDPOINT_URL=(str, ""),
+    S3_REGION=(str, "auto"),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -47,12 +52,12 @@ ALLOWED_HOSTS: list[str] = []
 
 INSTALLED_APPS = [
     "daphne",
-    "django.contrib.admin",
+    # "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
+    # "django.contrib.staticfiles",
     "ninja_extra",
     # ###
     # cors
@@ -155,6 +160,7 @@ CHANNEL_LAYERS = {
     },
 }
 
+
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
@@ -167,13 +173,6 @@ DATABASES = {
     # read os.environ['SQLITE_URL']
     "extra": env.db_url("SQLITE_URL", default="sqlite:////tmp/my-tmp-sqlite.db"),  # pyright: ignore
 }
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
 
 
 # Password validation
@@ -210,4 +209,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = "static/"
+# STATIC_URL = "static/"
+
+
+# Object Storage (S3-compatible via django-storages)
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "access_key": env("S3_ACCESS_KEY_ID"),
+            "secret_key": env("S3_SECRET_ACCESS_KEY"),
+            "bucket_name": env("S3_BUCKET_NAME"),
+            "endpoint_url": env("S3_ENDPOINT_URL"),
+            "region_name": env("S3_REGION"),
+            "file_overwrite": False,
+        },
+    },
+}
