@@ -10,9 +10,12 @@ services:
       - DEBUG=${DEBUG}
       - SECRET_KEY=${SECRET_KEY}
       - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
     # Wait for the database to pass its healthcheck before starting the web service.
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     develop:
       watch:
@@ -55,6 +58,19 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   mailpit:
     image: axllent/mailpit
     container_name: mailpit
@@ -72,4 +88,5 @@ services:
 
 volumes:
   db-data:
+  redis-data:
   mailpit-data:
