@@ -2,18 +2,18 @@ from channels.db import database_sync_to_async
 from channels.middleware import BaseMiddleware
 from channels.security.websocket import WebsocketDenier
 
-from apps.machines.services import MachineService
+from apps.machines.services import MachinesService
 
 
 class MachineTokenAuthMiddleware(BaseMiddleware):
-    async def __call__(self, scope, receive, send):
+    async def __call__(self, scope, receive, send):  # pyright: ignore[reportIncompatibleMethodOverride]
         machine = None
 
         headers = dict(scope.get("headers", []))
         auth = headers.get(b"authorization", b"").decode()
         scheme, _, raw = auth.partition(" ")
         if scheme.lower() == "bearer" and raw.strip():
-            machine = await database_sync_to_async(MachineService.authenticate)(
+            machine = await database_sync_to_async(MachinesService().authenticate)(
                 raw.strip()
             )
 
