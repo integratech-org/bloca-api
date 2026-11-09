@@ -77,6 +77,8 @@ INSTALLED_APPS = [
     # apps
     # ###
     "apps.users",
+    "apps.machines",
+    "apps.edge",
 ]
 
 MIDDLEWARE = [
