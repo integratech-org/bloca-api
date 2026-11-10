@@ -8,8 +8,8 @@ dependencies = [
   "channels-redis>=4.3.0",
   "redis>=6.4,<8",
   "channels[daphne,types]>=4.3.2",
-  "django>=6.0.7",
-  "django-allauth[headless,headless-spec,socialaccount]>=65.18.0",
+  "django>=6.1.3",
+  "django-allauth[headless,headless-spec]>=65.18.0",
   "django-cors-headers>=4.9.0",
   "django-environ>=0.14.0",
   "django-ninja>=1.6.2",
@@ -38,7 +38,68 @@ module = ["environ.*", "allauth.*"]
 ignore_missing_imports = true
 
 [tool.django-stubs]
-django_settings_module = "config.settings"
+django_settings_module = "config.settings.dev"
 
 [tool.ruff]
 extend-exclude = ["**/migrations/*.py"]
+
+lint.select = [
+  "A",
+  "ASYNC",
+  "B",
+  "BLE",
+  "C4",
+  "C90",
+  "COM",
+  "DJ",
+  "DTZ",
+  "E",
+  "EM",
+  "ERA",
+  "EXE",
+  "F",
+  "FA",
+  "FBT",
+  "FLY",
+  "G",
+  "I",
+  "ICN",
+  "INP",
+  "INT",
+  "ISC",
+  "N",
+  "PD",
+  "PERF",
+  "PGH",
+  "PIE",
+  "PL",
+  "PT",
+  "PTH",
+  "PYI",
+  "Q",
+  "RET",
+  "RSE",
+  "RUF",
+  "S",
+  "SIM",
+  "SLF",
+  "SLOT",
+  "T10",
+  "T20",
+  "TC",
+  "TID",
+  "TRY",
+  "UP",
+  "W",
+  "YTT",
+]
+lint.ignore = [
+  "COM812",
+  "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
+  "S101",   # Use of assert detected https://docs.astral.sh/ruff/rules/assert/
+  "SIM102", # sometimes it's better to nest
+  # of types for comparison.
+  # Deactivated because it can make the code slow:
+  # https://github.com/astral-sh/ruff/issues/7871
+]
+lint.isort.force-single-line = true
