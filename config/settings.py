@@ -51,27 +51,23 @@ ALLOWED_HOSTS: list[str] = []
 # Application definition
 
 INSTALLED_APPS = [
+    # ###
+    # django
+    # ###
     "daphne",
-    # "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     # "django.contrib.staticfiles",
-    "ninja_extra",
     # ###
-    # cors
-    # ###
-    "corsheaders",
-    # ###
-    # allauth
+    # third party
     # ###
     "allauth",
     "allauth.account",
     "allauth.headless",
-    # ###
-    # role permissions
-    # ###
+    "corsheaders",
+    "ninja_extra",
     "rolepermissions",
     # ###
     # apps
