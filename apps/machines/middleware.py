@@ -14,7 +14,7 @@ class MachineTokenAuthMiddleware(BaseMiddleware):
         scheme, _, raw = auth.partition(" ")
         if scheme.lower() == "bearer" and raw.strip():
             machine = await database_sync_to_async(MachinesService().authenticate)(
-                raw.strip()
+                raw.strip(),
             )
 
         if machine is None:
