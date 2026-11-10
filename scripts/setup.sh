@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # bloca-api - Development Environment Setup Script
-# This script sets up the development environment for the bloca-ml project.
+# This script sets up the development environment for the bloca-api project.
 # It installs necessary dependencies, configures the environment, and prepares the project for development.
 #
 # Usage:
