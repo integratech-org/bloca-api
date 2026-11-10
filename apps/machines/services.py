@@ -15,7 +15,7 @@ class MachinesService:
         return token
 
     def revoke_token(self, machine: Machine) -> None:
-        machine.token_hash = None
+        machine.token_hash = ""
         machine.save(update_fields=["token_hash"])
 
     def authenticate(self, token: str) -> Machine | None:
