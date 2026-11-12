@@ -12,7 +12,9 @@ class Machine(models.Model):
     )
     name = models.CharField(max_length=100, unique=True)
     site = models.CharField(max_length=100, blank=True)
-    token_hash = models.CharField(max_length=64, unique=True, editable=False)
+    token_hash = models.CharField(
+        max_length=64, unique=True, editable=False, blank=True, null=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
