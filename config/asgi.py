@@ -21,5 +21,8 @@ django_application = get_asgi_application()
 
 
 application = ProtocolTypeRouter(
-    {"http": django_application, "websocket": URLRouter(websocket_urlpatterns)},
+    {
+        "http": django_application,
+        "websocket": URLRouter(websocket_urlpatterns),  # type: ignore[arg-type]
+    },
 )
