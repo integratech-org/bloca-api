@@ -1,6 +1,6 @@
 from typing import ClassVar
 
-from rolepermissions.roles import AbstractUserRole
+from rolepermissions.roles import AbstractUserRole  # type: ignore[import-untyped]
 
 
 class SystemAdmin(AbstractUserRole):
