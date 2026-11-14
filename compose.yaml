@@ -86,7 +86,40 @@ services:
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
 
+  seaweedfs-s3:
+    image: chrislusf/seaweedfs
+    container_name: seaweedfs-s3
+    ports:
+      - "8333:8333"
+    volumes:
+      - seaweed-data:/data
+    entrypoint: /bin/sh -c
+    command: |
+      "echo '{
+        \"identities\": [
+          {
+            \"name\": \"bloca\",
+            \"credentials\": [
+              {
+                \"accessKey\": \"bloca_access_key1\",
+                \"secretKey\": \"bloca_secret_key1\"
+              }
+            ],
+            \"actions\": [
+              \"Admin\",
+              \"Read\",
+              \"List\",
+              \"Tagging\",
+              \"Write\"
+            ]
+          }
+        ]
+      }' > /etc/seaweedfs/config.json && \
+      weed server -dir=/data -s3 -s3.config /etc/seaweedfs/config.json"
+    restart: unless-stopped
+
 volumes:
   db-data:
   redis-data:
   mailpit-data:
+  seaweed-data:
