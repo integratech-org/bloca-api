@@ -1,4 +1,6 @@
+from django.utils import timezone
 from factory.declarations import LazyAttribute
+from factory.declarations import LazyFunction
 from factory.declarations import Sequence
 from factory.django import DjangoModelFactory
 from factory.faker import Faker
@@ -15,3 +17,5 @@ class MachineFactory(DjangoModelFactory):
     name = Sequence(lambda n: f"BLOCA-machine{n}")
     site = Faker("city")
     token_hash = LazyAttribute(lambda o: hash_token(o.name))
+    created_at = LazyFunction(timezone.now)
+    updated_at = LazyFunction(timezone.now)
