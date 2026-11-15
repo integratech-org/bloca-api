@@ -5,12 +5,21 @@ from django.shortcuts import aget_object_or_404
 from injector import inject
 from ninja.responses import Status
 from ninja_extra import api_controller
+from ninja_extra import paginate
 from ninja_extra import route
+from ninja_extra.ordering import Ordering
+from ninja_extra.ordering import ordering
+from ninja_extra.pagination import PageNumberPaginationExtra
+from ninja_extra.pagination import PaginatedResponseSchema
 
 from apps.machines.models import Machine
 
 from .schemas import MachinesCreateIn
 from .schemas import MachinesCreateOut
+from .schemas import MachinesIssueTokenOut
+from .schemas import MachinesOut
+from .schemas import MachinesUpdateIn
+from .schemas import MachinesUpdateOut
 from .services import MachinesService  # noqa: TC001
 
 
@@ -20,33 +29,40 @@ class MachinesController:
     def __init__(self, machines_service: MachinesService):
         self.machines_service = machines_service
 
-    @route.get("/")
+    @route.get("/", response=PaginatedResponseSchema[MachinesOut])
+    @paginate(PageNumberPaginationExtra, page_size=25)
+    @ordering(
+        Ordering,
+        ordering_fields=["created_at"],
+    )
     def get_machines(self):
-        return {"message": "List of machines"}
+        return self.machines_service.list_machines()
 
     @route.post("/", response={201: MachinesCreateOut})
     def create_machine(self, payload: MachinesCreateIn):
         return Status(201, self.machines_service.create_machine(payload))
 
-    @route.get("{machine_id}/")
+    @route.get("{machine_id}/", response={200: MachinesOut})
     def get_machine(self, machine_id: UUID):
-        return {"message": "Details of machine"}
+        return self.machines_service.get_machine(machine_id)
 
-    @route.patch("{machine_id}/")
-    def update_machine(self, machine_id: UUID):
-        return {"message": "Machine updated"}
+    @route.patch("{machine_id}/", response={200: MachinesUpdateOut})
+    def update_machine(self, machine_id: UUID, payload: MachinesUpdateIn):
+        return Status(200, self.machines_service.update_machine(machine_id, payload))
 
     @route.delete("{machine_id}/")
     def delete_machine(self, machine_id: UUID):
-        return {"message": "Machine deleted"}
+        self.machines_service.delete_machine(machine_id)
+        return Status(204, None)
 
-    @route.post("{machine_id}/token/")
+    @route.post("{machine_id}/token/", response={200: MachinesIssueTokenOut})
     def issue_token(self, machine_id: UUID):
-        return {"message": "Token generated for machine"}
+        return Status(200, {"token": self.machines_service.issue_token(machine_id)})
 
     @route.post("{machine_id}/token/revoke/")
     def revoke_token(self, machine_id: UUID):
-        return {"message": "Token revoked for machine"}
+        self.machines_service.revoke_token(machine_id)
+        return Status(204, None)
 
     @route.get("{machine_id}/stream")
     async def stream(self, machine_id: UUID):
