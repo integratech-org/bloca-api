@@ -5,7 +5,7 @@ from pydantic import Field
 from .models import Machine
 
 
-class MachinesOut(ModelSchema):
+class MachineOut(ModelSchema):
     class Meta:
         model = Machine
         fields = [
@@ -16,12 +16,12 @@ class MachinesOut(ModelSchema):
         ]
 
 
-class MachinesCreateIn(Schema):
+class MachineCreateIn(Schema):
     name: str = Field(min_length=1, max_length=100, description="Name of the machine")
     site: str = Field(default="", max_length=100, description="Site of the machine")
 
 
-class MachinesCreateOut(ModelSchema):
+class MachineCreateOut(ModelSchema):
     token: str = Field(description="Token for the machine")
 
     class Meta:
@@ -33,12 +33,12 @@ class MachinesCreateOut(ModelSchema):
         ]
 
 
-class MachinesUpdateIn(Schema):
+class MachineUpdateIn(Schema):
     name: str = Field(min_length=1, max_length=100, description="Name of the machine")
     site: str = Field(default="", max_length=100, description="Site of the machine")
 
 
-class MachinesUpdateOut(ModelSchema):
+class MachineUpdateOut(ModelSchema):
     class Meta:
         model = Machine
         fields = [
@@ -48,5 +48,5 @@ class MachinesUpdateOut(ModelSchema):
         ]
 
 
-class MachinesIssueTokenOut(Schema):
+class MachineIssueTokenOut(Schema):
     token: str = Field(description="Token for the machine")

@@ -11,16 +11,16 @@ from django.shortcuts import get_object_or_404
 from apps.common.utils import hash_token
 
 from .models import Machine
-from .schemas import MachinesCreateIn  # noqa: TC001
-from .schemas import MachinesUpdateIn  # noqa: TC001
+from .schemas import MachineCreateIn  # noqa: TC001
+from .schemas import MachineUpdateIn  # noqa: TC001
 
 
-class MachinesService:
+class MachineService:
     def list_machines(self):
         return Machine.objects.all()
 
     @transaction.atomic
-    def create_machine(self, payload: MachinesCreateIn) -> Machine:
+    def create_machine(self, payload: MachineCreateIn) -> Machine:
         machine = Machine.objects.create(**payload.dict())
         token = self.issue_token(machine.id)
         machine.token = token  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
@@ -29,7 +29,7 @@ class MachinesService:
     def get_machine(self, machine_id: UUID) -> Machine:
         return get_object_or_404(Machine, id=machine_id)
 
-    def update_machine(self, machine_id: UUID, payload: MachinesUpdateIn) -> Machine:
+    def update_machine(self, machine_id: UUID, payload: MachineUpdateIn) -> Machine:
         machine = get_object_or_404(Machine, id=machine_id)
         for attr, value in payload.dict().items():
             setattr(machine, attr, value)
