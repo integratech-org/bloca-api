@@ -1,5 +1,4 @@
 import asyncio
-import hashlib
 import json
 import secrets
 from collections.abc import AsyncGenerator  # noqa: TC003
@@ -9,23 +8,17 @@ from channels.layers import get_channel_layer
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
+from apps.common.utils import hash_token
+
 from .models import Machine
 from .schemas import MachinesCreateIn  # noqa: TC001
 
 
 class MachinesService:
-    def hash_token(self, token: str) -> str:
-        return hashlib.sha256(str(token).encode("utf-8")).hexdigest()
-
-    def authenticate(self, token: str) -> Machine | None:
-        if not token:
-            return None
-        return Machine.objects.filter(token_hash=self.hash_token(token)).first()
-
     def issue_token(self, machine_id: UUID) -> str:
         machine = get_object_or_404(Machine, id=machine_id)
         token = secrets.token_urlsafe(32)
-        machine.token_hash = self.hash_token(token)
+        machine.token_hash = hash_token(token)
         machine.save(update_fields=["token_hash"])
         return token
 
