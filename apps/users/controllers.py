@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 from injector import inject
 from ninja.responses import Status
 from ninja_extra import api_controller
@@ -7,9 +5,7 @@ from ninja_extra import route
 
 from .schemas import UserCreateIn
 from .schemas import UserOut
-
-if TYPE_CHECKING:
-    from .services import UsersService
+from .services import UsersService  # noqa: TC001
 
 
 @api_controller("/users", tags=["Users"])
