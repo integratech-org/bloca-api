@@ -50,7 +50,7 @@ class MachineController:
     def update_machine(self, machine_id: UUID, payload: MachineUpdateIn):
         return Status(200, self.machines_service.update_machine(machine_id, payload))
 
-    @route.delete("{machine_id}/")
+    @route.delete("{machine_id}/", response={204: None})
     def delete_machine(self, machine_id: UUID):
         self.machines_service.delete_machine(machine_id)
         return Status(204, None)
@@ -59,7 +59,7 @@ class MachineController:
     def issue_token(self, machine_id: UUID):
         return Status(200, {"token": self.machines_service.issue_token(machine_id)})
 
-    @route.post("{machine_id}/token/revoke/")
+    @route.post("{machine_id}/token/revoke/", response={204: None})
     def revoke_token(self, machine_id: UUID):
         self.machines_service.revoke_token(machine_id)
         return Status(204, None)
