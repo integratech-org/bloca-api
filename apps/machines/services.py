@@ -12,9 +12,33 @@ from apps.common.utils import hash_token
 
 from .models import Machine
 from .schemas import MachinesCreateIn  # noqa: TC001
+from .schemas import MachinesUpdateIn  # noqa: TC001
 
 
 class MachinesService:
+    def list_machines(self):
+        return Machine.objects.all()
+
+    @transaction.atomic
+    def create_machine(self, payload: MachinesCreateIn) -> Machine:
+        machine = Machine.objects.create(**payload.dict())
+        token = self.issue_token(machine.id)
+        machine.token = token  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
+        return machine
+
+    def get_machine(self, machine_id: UUID) -> Machine:
+        return get_object_or_404(Machine, id=machine_id)
+
+    def update_machine(self, machine_id: UUID, payload: MachinesUpdateIn) -> Machine:
+        machine = get_object_or_404(Machine, id=machine_id)
+        for attr, value in payload.dict().items():
+            setattr(machine, attr, value)
+        machine.save(update_fields=["name", "site", "updated_at"])
+        return machine
+
+    def delete_machine(self, machine_id: UUID):
+        get_object_or_404(Machine, id=machine_id).delete()
+
     def issue_token(self, machine_id: UUID) -> str:
         machine = get_object_or_404(Machine, id=machine_id)
         token = secrets.token_urlsafe(32)
@@ -26,13 +50,6 @@ class MachinesService:
         machine = get_object_or_404(Machine, id=machine_id)
         machine.token_hash = None
         machine.save(update_fields=["token_hash", "updated_at"])
-
-    @transaction.atomic
-    def create_machine(self, payload: MachinesCreateIn) -> Machine:
-        machine = Machine.objects.create(**payload.dict())
-        token = self.issue_token(machine.id)
-        machine.token = token  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
-        return machine
 
     async def stream_events(self, machine_id: UUID) -> AsyncGenerator[str]:
         layer = get_channel_layer()
