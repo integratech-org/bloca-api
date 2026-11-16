@@ -8,12 +8,7 @@ from .models import Machine
 class MachineOut(ModelSchema):
     class Meta:
         model = Machine
-        fields = [
-            "id",
-            "name",
-            "site",
-            "created_at",
-        ]
+        fields = ["id", "name", "site", "created_at", "updated_at", "deleted_at"]
 
 
 class MachineCreateIn(Schema):
