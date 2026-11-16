@@ -31,6 +31,7 @@ dependencies = [
     { name = "django-ninja" },
     { name = "django-ninja-extra" },
     { name = "django-role-permissions" },
+    { name = "django-softdelete" },
     { name = "django-storages", extra = ["s3"] },
     { name = "gunicorn" },
     { name = "psycopg", extra = ["binary"] },
@@ -60,6 +61,7 @@ requires-dist = [
     { name = "django-ninja", specifier = ">=1.6.2,<1.8" },
     { name = "django-ninja-extra", specifier = ">=0.31.5" },
     { name = "django-role-permissions", specifier = ">=3.2.0" },
+    { name = "django-softdelete", specifier = ">=0.11.5" },
     { name = "django-storages", extras = ["s3"], specifier = ">=1.14.6" },
     { name = "gunicorn", specifier = ">=26.0.0" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.3.4" },
@@ -613,6 +615,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c7/5b/c2b85791ca63f846ecc33561b9e486cccd8ee3cee906ec694c4e3b7b3f7d/django-role-permissions-3.2.0.tar.gz", hash = "sha256:5a89eaa098f3da951b4633e655d5f3188f3d6ec5f0b846a8b1690d094ddc6ea6", size = 16479, upload-time = "2023-06-09T20:31:32.42Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/21/03/baa0d85a7b82bf8fa02f31627d789f39245841975717fd93a973f1a35afc/django_role_permissions-3.2.0-py3-none-any.whl", hash = "sha256:39c4237e9ed2983c0d7fa38bd7f7c4942a04daac739d5be1921efccb074a0606", size = 12782, upload-time = "2023-06-09T20:31:30.853Z" },
+]
+
+[[package]]
+name = "django-softdelete"
+version = "0.11.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/3c/e8/f0107fb1e4339330a1f71165a20eb128355620b8eb0a45f1fa35d64e527a/django_softdelete-0.11.5.tar.gz", hash = "sha256:d2e1c11cad2e664f2ec0644b9e23c7e8da4e59851fab312be69b5cf6ce12c7ab", size = 17367, upload-time = "2025-04-10T13:04:09.017Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/44/62/44cd9ac2ef776f0544df752d33652b665df7a132fe5f1e4115b994c7ee20/django_softdelete-0.11.5-py3-none-any.whl", hash = "sha256:72d086ea4572b85a7fe027dcf58625e091202c924c58aca2e3d4f7e6dde4c72f", size = 24852, upload-time = "2025-04-10T13:04:16.773Z" },
 ]
 
 [[package]]

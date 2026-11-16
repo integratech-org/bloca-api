@@ -1,7 +1,5 @@
 from ninja_extra import permissions
-from rolepermissions.checkers import (
-    has_object_permission,  # type: ignore[import-untyped]
-)
+from rolepermissions.checkers import has_object_permission
 from rolepermissions.checkers import has_permission
 from rolepermissions.checkers import has_role
 

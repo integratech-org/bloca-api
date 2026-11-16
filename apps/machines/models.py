@@ -2,8 +2,10 @@ import uuid
 
 from django.db import models
 
+from apps.common.models import BaseModel
 
-class Machine(models.Model):
+
+class Machine(BaseModel):
     id = models.UUIDField(
         default=uuid.uuid4,
         unique=True,
@@ -15,8 +17,20 @@ class Machine(models.Model):
     token_hash = models.CharField(
         max_length=64, unique=True, editable=False, blank=True, null=True
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta(BaseModel.Meta):
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name"],
+                condition=models.Q(deleted_at__isnull=True),
+                name="uniq_machine_name_alive",
+            ),
+            models.UniqueConstraint(
+                fields=["token_hash"],
+                condition=models.Q(deleted_at__isnull=True),
+                name="uniq_machine_token_hash_alive",
+            ),
+        ]
 
     def __str__(self):
         return self.name

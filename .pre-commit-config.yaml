@@ -41,6 +41,7 @@ repos:
         additional_dependencies:
           - channels[daphne]
           - django-extensions
+          - django-softdelete
           - django-stubs
           - django-allauth
           - django-cors-headers

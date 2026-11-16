@@ -33,8 +33,9 @@ INSTALLED_APPS = [
     "daphne",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.sessions",
+    #
     # third party
     "allauth",
     "allauth.account",
@@ -42,10 +43,11 @@ INSTALLED_APPS = [
     "corsheaders",
     "ninja_extra",
     "rolepermissions",
+    "softdelete",
     # local
-    "apps.users",
-    "apps.machines",
     "apps.edge",
+    "apps.machines",
+    "apps.users",
 ]
 
 MIDDLEWARE = [
