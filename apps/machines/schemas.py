@@ -6,6 +6,8 @@ from .models import Machine
 
 
 class MachineOut(ModelSchema):
+    token_status: str = Field(description="Status of the machine token")
+
     class Meta:
         model = Machine
         fields = ["id", "name", "site", "created_at", "updated_at", "deleted_at"]
