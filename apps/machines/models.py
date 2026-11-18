@@ -17,6 +17,7 @@ class Machine(BaseModel):
     token_hash = models.CharField(
         max_length=64, unique=True, editable=False, blank=True, null=True
     )
+    revoked_at = models.DateTimeField(blank=True, null=True, editable=False)
 
     class Meta(BaseModel.Meta):
         constraints = [
@@ -31,6 +32,14 @@ class Machine(BaseModel):
                 name="uniq_machine_token_hash_alive",
             ),
         ]
+
+    @property
+    def token_status(self):
+        if self.revoked_at:
+            return "revoked"
+        if self.token_hash:
+            return "active"
+        return "not_issued"
 
     def __str__(self):
         return self.name
