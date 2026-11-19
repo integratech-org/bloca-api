@@ -134,6 +134,9 @@ CHANNEL_LAYERS = {
 }
 
 
+CELERY_BROKER_URL = env("REDIS_URL")
+CELERY_RESULT_BACKEND = env("REDIS_URL")
+
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
