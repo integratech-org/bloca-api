@@ -35,10 +35,6 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.messages",
     "django.contrib.sessions",
-    # local - apps.users MUST come before allauth for template override
-    "apps.users",
-    "apps.machines",
-    "apps.edge",
     # third party
     "allauth",
     "allauth.account",
@@ -47,6 +43,10 @@ INSTALLED_APPS = [
     "ninja_extra",
     "rolepermissions",
     "softdelete",
+    # local
+    "apps.edge",
+    "apps.machines",
+    "apps.users",
 ]
 
 MIDDLEWARE = [
@@ -72,7 +72,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
