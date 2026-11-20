@@ -39,8 +39,10 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies:
+          - celery
           - channels[daphne]
           - django-extensions
+          - django-softdelete
           - django-stubs
           - django-allauth
           - django-cors-headers

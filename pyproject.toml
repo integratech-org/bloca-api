@@ -20,6 +20,8 @@ dependencies = [
   "psycopg[binary]>=3.3.4",
   "uvicorn>=0.51.0",
   "uvicorn-worker>=0.4.0",
+  "django-softdelete>=0.11.5",
+  "celery>=5.7.0",
 ]
 
 [dependency-groups]
@@ -36,7 +38,7 @@ dev = [
 plugins = ["mypy_django_plugin.main", "pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["environ.*", "allauth.*"]
+module = ["environ.*", "allauth.*", "softdelete.*", "rolepermissions.*"]
 ignore_missing_imports = true
 
 [tool.django-stubs]

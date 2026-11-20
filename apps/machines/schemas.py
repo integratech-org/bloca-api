@@ -1,3 +1,5 @@
+from datetime import datetime  # noqa: TC003
+
 from ninja import ModelSchema
 from ninja import Schema
 from pydantic import Field
@@ -6,14 +8,14 @@ from .models import Machine
 
 
 class MachineOut(ModelSchema):
+    deleted_at: datetime | None = Field(
+        description="Timestamp when the machine was deleted, if applicable"
+    )
+    token_status: Machine.TokenStatus = Field(description="Status of the machine token")
+
     class Meta:
         model = Machine
-        fields = [
-            "id",
-            "name",
-            "site",
-            "created_at",
-        ]
+        fields = ["id", "name", "site", "created_at", "updated_at", "deleted_at"]
 
 
 class MachineCreateIn(Schema):

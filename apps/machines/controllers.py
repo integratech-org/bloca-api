@@ -3,6 +3,7 @@ from uuid import UUID  # noqa: TC003
 from django.http import StreamingHttpResponse
 from django.shortcuts import aget_object_or_404
 from injector import inject
+from ninja import Query  # noqa: TC002
 from ninja.responses import Status
 from ninja_extra import api_controller
 from ninja_extra import paginate
@@ -11,9 +12,11 @@ from ninja_extra.ordering import Ordering
 from ninja_extra.ordering import ordering
 from ninja_extra.pagination import PageNumberPaginationExtra
 from ninja_extra.pagination import PaginatedResponseSchema
+from ninja_extra.searching import Searching
+from ninja_extra.searching import searching
 
-from apps.machines.models import Machine
-
+from .filters import MachineFilterSchema  # noqa: TC001
+from .models import Machine
 from .schemas import MachineCreateIn
 from .schemas import MachineCreateOut
 from .schemas import MachineIssueTokenOut
@@ -33,10 +36,11 @@ class MachineController:
     @paginate(PageNumberPaginationExtra, page_size=25)
     @ordering(
         Ordering,
-        ordering_fields=["created_at"],
+        ordering_fields=["name", "created_at"],
     )
-    def get_machines(self):
-        return self.machines_service.list_machines()
+    @searching(Searching, search_fields=["name", "site"])
+    def get_machines(self, filters: Query[MachineFilterSchema]):
+        return self.machines_service.list_machines(filters)
 
     @route.post("/", response={201: MachineCreateOut})
     def create_machine(self, payload: MachineCreateIn):
@@ -53,6 +57,11 @@ class MachineController:
     @route.delete("{machine_id}/", response={204: None})
     def delete_machine(self, machine_id: UUID):
         self.machines_service.delete_machine(machine_id)
+        return Status(204, None)
+
+    @route.post("{machine_id}/restore", response={204: None})
+    def restore_machine(self, machine_id: UUID):
+        self.machines_service.restore_machine(machine_id)
         return Status(204, None)
 
     @route.post("{machine_id}/token/", response={200: MachineIssueTokenOut})

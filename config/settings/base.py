@@ -23,7 +23,7 @@ env.read_env(str(BASE_DIR / ".env"))
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 
 # Application definition
@@ -33,9 +33,9 @@ INSTALLED_APPS = [
     "daphne",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    "django.contrib.sessions",
     "django.contrib.messages",
-    # local
+    "django.contrib.sessions",
+    # local - apps.users MUST come before allauth for template override
     "apps.users",
     "apps.machines",
     "apps.edge",
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "ninja_extra",
     "rolepermissions",
+    "softdelete",
 ]
 
 MIDDLEWARE = [
@@ -104,7 +105,7 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_LOGIN_METHODS = {"email"}
 
-FRONTEND_URL = env("FRONTEND_URL")
+FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")
 
 MAILERS = {
     "default": {
@@ -133,6 +134,9 @@ CHANNEL_LAYERS = {
     },
 }
 
+
+CELERY_BROKER_URL = env("REDIS_URL")
+CELERY_RESULT_BACKEND = env("REDIS_URL")
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases

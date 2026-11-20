@@ -2,8 +2,15 @@ import uuid
 
 from django.db import models
 
+from apps.common.models import BaseModel
 
-class Machine(models.Model):
+
+class Machine(BaseModel):
+    class TokenStatus(models.TextChoices):
+        ACTIVE = "active", "Active"
+        REVOKED = "revoked", "Revoked"
+        NOT_ISSUED = "not_issued", "Not Issued"
+
     id = models.UUIDField(
         default=uuid.uuid4,
         unique=True,
@@ -15,8 +22,29 @@ class Machine(models.Model):
     token_hash = models.CharField(
         max_length=64, unique=True, editable=False, blank=True, null=True
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    revoked_at = models.DateTimeField(blank=True, null=True, editable=False)
+
+    class Meta(BaseModel.Meta):
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name"],
+                condition=models.Q(deleted_at__isnull=True),
+                name="uniq_machine_name_alive",
+            ),
+            models.UniqueConstraint(
+                fields=["token_hash"],
+                condition=models.Q(deleted_at__isnull=True),
+                name="uniq_machine_token_hash_alive",
+            ),
+        ]
+
+    @property
+    def token_status(self):
+        if self.revoked_at:
+            return self.TokenStatus.REVOKED
+        if self.token_hash:
+            return self.TokenStatus.ACTIVE
+        return self.TokenStatus.NOT_ISSUED
 
     def __str__(self):
         return self.name
