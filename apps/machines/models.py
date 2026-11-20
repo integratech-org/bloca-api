@@ -6,6 +6,11 @@ from apps.common.models import BaseModel
 
 
 class Machine(BaseModel):
+    class TokenStatus(models.TextChoices):
+        ACTIVE = "active", "Active"
+        REVOKED = "revoked", "Revoked"
+        NOT_ISSUED = "not_issued", "Not Issued"
+
     id = models.UUIDField(
         default=uuid.uuid4,
         unique=True,
@@ -36,10 +41,10 @@ class Machine(BaseModel):
     @property
     def token_status(self):
         if self.revoked_at:
-            return "revoked"
+            return self.TokenStatus.REVOKED
         if self.token_hash:
-            return "active"
-        return "not_issued"
+            return self.TokenStatus.ACTIVE
+        return self.TokenStatus.NOT_ISSUED
 
     def __str__(self):
         return self.name

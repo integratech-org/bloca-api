@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from apps.common.utils import hash_token
+from apps.machines.filters import MachineFilterSchema  # noqa: TC001
 
 from .models import Machine
 from .schemas import MachineCreateIn  # noqa: TC001
@@ -17,8 +18,11 @@ from .schemas import MachineUpdateIn  # noqa: TC001
 
 
 class MachineService:
-    def list_machines(self):
-        return Machine.objects.all()
+    def list_machines(self, filters: MachineFilterSchema | None):
+        machines = Machine.objects.all_with_deleted()
+        if filters:
+            return filters.filter(machines)
+        return machines.filter(deleted_at__isnull=True)
 
     @transaction.atomic
     def create_machine(self, payload: MachineCreateIn) -> Machine:
