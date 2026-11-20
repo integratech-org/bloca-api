@@ -5,9 +5,11 @@ from collections.abc import AsyncGenerator  # noqa: TC003
 from uuid import UUID  # noqa: TC003
 
 from channels.layers import get_channel_layer
+from django.db import IntegrityError
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from ninja.errors import HttpError
 
 from apps.common.utils import hash_token
 from apps.machines.filters import MachineFilterSchema  # noqa: TC001
@@ -43,6 +45,14 @@ class MachineService:
 
     def delete_machine(self, machine_id: UUID):
         get_object_or_404(Machine, id=machine_id).delete()
+
+    def restore_machine(self, machine_id: UUID):
+        machine = get_object_or_404(Machine.objects.deleted_set(), id=machine_id)
+        try:
+            with transaction.atomic():
+                machine.undelete()
+        except IntegrityError:
+            raise HttpError(409, "Machine name already in use.") from None
 
     def issue_token(self, machine_id: UUID) -> str:
         machine = get_object_or_404(Machine, id=machine_id)

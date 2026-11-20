@@ -3,6 +3,6 @@ from .base import INSTALLED_APPS
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]  # noqa: S104
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "192.168.100.75"]  # noqa: S104
 
 INSTALLED_APPS = [*INSTALLED_APPS, "django_extensions"]
