@@ -9,11 +9,11 @@ class UserCreateIn(Schema):
     email: str = Field(description="User's email address")
     first_name: str = Field(min_length=1, max_length=150, description="First name")
     last_name: str = Field(min_length=1, max_length=150, description="Last name")
-    role: str = Field(description="Role to assign: Admin or Operator")
+    role: str = Field(description="User's Role")
 
 
 class UserCreateOut(ModelSchema):
-    role: str = Field(description="Assigned role: Admin or Operator")
+    role: str = Field(description="User's Role")
 
     class Meta:
         model = User
