@@ -20,7 +20,9 @@ class MachineOut(ModelSchema):
 
 class MachineCreateIn(Schema):
     name: str = Field(min_length=1, max_length=100, description="Name of the machine")
-    site: str = Field(default="", max_length=100, description="Site of the machine")
+    site: str | None = Field(
+        default=None, max_length=100, description="Site of the machine"
+    )
 
 
 class MachineCreateOut(ModelSchema):
@@ -29,15 +31,15 @@ class MachineCreateOut(ModelSchema):
     class Meta:
         model = Machine
         fields = [
-            "id",
             "name",
-            "site",
         ]
 
 
 class MachineUpdateIn(Schema):
     name: str = Field(min_length=1, max_length=100, description="Name of the machine")
-    site: str = Field(default="", max_length=100, description="Site of the machine")
+    site: str | None = Field(
+        default=None, max_length=100, description="Site of the machine"
+    )
 
 
 class MachineUpdateOut(ModelSchema):
@@ -50,5 +52,11 @@ class MachineUpdateOut(ModelSchema):
         ]
 
 
-class MachineIssueTokenOut(Schema):
+class MachineIssueTokenOut(ModelSchema):
     token: str = Field(description="Token for the machine")
+
+    class Meta:
+        model = Machine
+        fields = [
+            "name",
+        ]
