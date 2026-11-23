@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.messages",
     "django.contrib.sessions",
+    "django.contrib.sites",
     # third party
     "allauth",
     "allauth.account",
@@ -93,10 +94,13 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_USER_MODEL = "users.User"
 
+SITE_ID = 1
+
 ROLEPERMISSIONS_MODULE = "config.roles"
 
 ACCOUNT_ADAPTER = "apps.users.adapter.MyAccountAdapter"
 
+ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = False
 ACCOUNT_PASSWORD_RESET_BY_CODE_ENABLED = True
@@ -105,15 +109,19 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_LOGIN_METHODS = {"email"}
 
-FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")
+FRONTEND_URL = env("FRONTEND_URL")
+
+HEADLESS_FRONTEND_URLS = {
+    "account_confirm_email": f"{FRONTEND_URL}/account/verify-email/{{key}}",
+}
 
 MAILERS = {
     "default": {
         "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
         "OPTIONS": {
             "host": env("SMTP_HOST"),
-            "port": env("SMTP_PORT"),
-            "use_tls": env("SMTP_USE_TLS"),
+            "port": env.int("SMTP_PORT"),
+            "use_tls": env.bool("SMTP_USE_TLS"),
             # port is not needed: it defaults to 587 with use_tls True.
             "username": env("SMTP_USER"),
             "password": env("SMTP_PASSWORD"),

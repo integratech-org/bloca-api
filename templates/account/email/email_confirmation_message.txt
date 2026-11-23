@@ -1,17 +1,16 @@
-Hi {{ user.first_name }},
+{% autoescape off %}Hi {{ user.first_name|default:"there" }}!,
 
-Welcome to BLOCA! Your operator account has been created.
+Yes, we know.
+An email to confirm an email. 🤪
 
-Your login credentials:
-• Email: {{ user.email }}
-• Password: {{ user.last_name }}
+Please validate your email address in order to get started using BLOCA.
 
-Please verify your email address by clicking the link below:
+Confirm your email:
 {{ activate_url }}
 
-This link expires in 24 hours.
+Didn't expect this email? You can safely ignore it.
+For questions or bug reports, contact integratech1@outlook.com
 
-Once verified, download the BLOCA mobile app and log in with your credentials.
-
-Best regards,
-The BLOCA Team
+The IntegraTech Team
+This is an automated email. Please do not reply.
+{% endautoescape %}

@@ -14,12 +14,7 @@ class UsersController:
     def __init__(self, users_service: UsersService):
         self.users_service = users_service
 
-    @route.post("", response={201: UserCreateOut})
+    @route.post("/", response={201: UserCreateOut})
     def create_user(self, payload: UserCreateIn):
-        """
-        Create a new user account.
-
-        A verification email will be sent to the user's email address.
-        """
         user = self.users_service.create_user(payload)
         return Status(201, user)
