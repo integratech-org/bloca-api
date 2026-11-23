@@ -1,0 +1,16 @@
+{% autoescape off %}Hi {{ user.first_name|default:"there" }}!,
+
+Yes, we know.
+An email to confirm an email. 🤪
+
+Please validate your email address in order to get started using BLOCA.
+
+Confirm your email:
+{{ activate_url }}
+
+Didn't expect this email? You can safely ignore it.
+For questions or bug reports, contact integratech1@outlook.com
+
+The IntegraTech Team
+This is an automated email. Please do not reply.
+{% endautoescape %}

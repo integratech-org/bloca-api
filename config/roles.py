@@ -1,10 +1,8 @@
-from typing import ClassVar
-
 from rolepermissions.roles import AbstractUserRole  # type: ignore[import-untyped]
 
 
 class SystemAdmin(AbstractUserRole):
-    available_permissions: ClassVar[dict[str, bool]] = {
+    available_permissions = {  # type: ignore[var-annotated]
         "add_user": True,
         "change_user": True,
         "delete_user": True,
@@ -13,8 +11,8 @@ class SystemAdmin(AbstractUserRole):
 
 
 class Admin(AbstractUserRole):
-    available_permissions: ClassVar[dict[str, bool]] = {}
+    available_permissions = {}  # type: ignore[var-annotated]
 
 
 class Operator(AbstractUserRole):
-    available_permissions: ClassVar[dict[str, bool]] = {}
+    available_permissions = {}  # type: ignore[var-annotated]
