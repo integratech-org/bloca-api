@@ -9,6 +9,7 @@ from rolepermissions.roles import assign_role
 from apps.users.factories import UserFactory
 from config.roles import Admin
 from config.roles import Operator
+from config.roles import SystemAdmin
 
 
 class Command(BaseCommand):
@@ -36,7 +37,7 @@ class Command(BaseCommand):
         try:
             users = UserFactory.create_batch(count)
 
-            roles = [Admin, Operator]
+            roles = [Admin, Operator, SystemAdmin]
             for user in users:
                 # Set password to last_name (matching your pattern)
                 user.set_password(user.last_name)
