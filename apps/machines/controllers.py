@@ -46,34 +46,34 @@ class MachineController:
     def create_machine(self, payload: MachineCreateIn):
         return Status(201, self.machines_service.create_machine(payload))
 
-    @route.get("{machine_id}/", response={200: MachineOut})
+    @route.get("/{machine_id}/", response={200: MachineOut})
     def get_machine(self, machine_id: UUID):
         return self.machines_service.get_machine(machine_id)
 
-    @route.patch("{machine_id}/", response={200: MachineUpdateOut})
+    @route.patch("/{machine_id}/", response={200: MachineUpdateOut})
     def update_machine(self, machine_id: UUID, payload: MachineUpdateIn):
         return Status(200, self.machines_service.update_machine(machine_id, payload))
 
-    @route.delete("{machine_id}/", response={204: None})
+    @route.delete("/{machine_id}/", response={204: None})
     def delete_machine(self, machine_id: UUID):
         self.machines_service.delete_machine(machine_id)
         return Status(204, None)
 
-    @route.post("{machine_id}/restore/", response={204: None})
+    @route.post("/{machine_id}/restore/", response={204: None})
     def restore_machine(self, machine_id: UUID):
         self.machines_service.restore_machine(machine_id)
         return Status(204, None)
 
-    @route.post("{machine_id}/token/", response={200: MachineIssueTokenOut})
+    @route.post("/{machine_id}/token/", response={200: MachineIssueTokenOut})
     def issue_token(self, machine_id: UUID):
         return Status(200, self.machines_service.issue_token(machine_id))
 
-    @route.post("{machine_id}/token/revoke/", response={204: None})
+    @route.post("/{machine_id}/token/revoke/", response={204: None})
     def revoke_token(self, machine_id: UUID):
         self.machines_service.revoke_token(machine_id)
         return Status(204, None)
 
-    @route.get("{machine_id}/stream/")
+    @route.get("/{machine_id}/stream/")
     async def stream(self, machine_id: UUID):
         machine = await aget_object_or_404(Machine, id=machine_id)
         res = StreamingHttpResponse(
