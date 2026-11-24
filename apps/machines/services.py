@@ -28,8 +28,11 @@ class MachineService:
 
     @transaction.atomic
     def create_machine(self, payload: MachineCreateIn) -> Machine:
-        machine = Machine.objects.create(**payload.dict())
-        token = self.issue_token(machine.id)
+        token = secrets.token_urlsafe(32)
+        machine = Machine.objects.create(
+            **payload.dict(),
+            token_hash=hash_token(token),
+        )
         machine.token = token  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
         return machine
 
@@ -54,13 +57,14 @@ class MachineService:
         except IntegrityError:
             raise HttpError(409, "Machine name already in use.") from None
 
-    def issue_token(self, machine_id: UUID) -> str:
+    def issue_token(self, machine_id: UUID) -> Machine:
         machine = get_object_or_404(Machine, id=machine_id)
         token = secrets.token_urlsafe(32)
         machine.token_hash = hash_token(token)
         machine.revoked_at = None
         machine.save(update_fields=["token_hash", "revoked_at", "updated_at"])
-        return token
+        machine.token = token  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
+        return machine
 
     def revoke_token(self, machine_id: UUID) -> None:
         machine = get_object_or_404(Machine, id=machine_id)

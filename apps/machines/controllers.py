@@ -59,21 +59,21 @@ class MachineController:
         self.machines_service.delete_machine(machine_id)
         return Status(204, None)
 
-    @route.post("{machine_id}/restore", response={204: None})
+    @route.post("{machine_id}/restore/", response={204: None})
     def restore_machine(self, machine_id: UUID):
         self.machines_service.restore_machine(machine_id)
         return Status(204, None)
 
     @route.post("{machine_id}/token/", response={200: MachineIssueTokenOut})
     def issue_token(self, machine_id: UUID):
-        return Status(200, {"token": self.machines_service.issue_token(machine_id)})
+        return Status(200, self.machines_service.issue_token(machine_id))
 
     @route.post("{machine_id}/token/revoke/", response={204: None})
     def revoke_token(self, machine_id: UUID):
         self.machines_service.revoke_token(machine_id)
         return Status(204, None)
 
-    @route.get("{machine_id}/stream")
+    @route.get("{machine_id}/stream/")
     async def stream(self, machine_id: UUID):
         machine = await aget_object_or_404(Machine, id=machine_id)
         res = StreamingHttpResponse(
