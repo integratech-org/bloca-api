@@ -1,3 +1,6 @@
+import random
+
+from allauth.account.models import EmailAddress
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 from django.core.management.base import CommandParser
@@ -18,32 +21,37 @@ class Command(BaseCommand):
             default=1,
             help="Number of users to create",
         )
-        parser.add_argument(
-            "--role",
-            type=str,
-            default="Operator",
-            choices=["Admin", "Operator"],
-            help="Role to assign to users",
-        )
 
     def handle(self, *args, **options):
         count = options["count"]
-        role = options["role"]
 
         if count < 1:
             msg = "--count must be at least 1."
             raise CommandError(msg)
 
-        self.stdout.write(self.style.SUCCESS(f"■ Seeding {count} {role} users..."))
+        self.stdout.write(
+            self.style.SUCCESS(f"■ Seeding {count} users with random roles...")
+        )
 
         try:
             users = UserFactory.create_batch(count)
 
-            role_class = Admin if role == "Admin" else Operator
+            roles = [Admin, Operator]
             for user in users:
                 # Set password to last_name (matching your pattern)
                 user.set_password(user.last_name)
                 user.save()
+
+                # Create verified email
+                EmailAddress.objects.create(
+                    user=user,
+                    email=user.email,
+                    verified=True,
+                    primary=True,
+                )
+
+                # Assign random role
+                role_class = random.choice(roles)  # noqa: S311
                 assign_role(user, role_class)
 
         except Exception as exc:
@@ -51,5 +59,7 @@ class Command(BaseCommand):
             raise CommandError(msg) from exc
 
         self.stdout.write(
-            self.style.SUCCESS(f"■ Successfully seeded {count} {role} users.")
+            self.style.SUCCESS(
+                f"■ Successfully seeded {count} users with random roles."
+            )
         )
