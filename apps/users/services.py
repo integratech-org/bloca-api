@@ -2,6 +2,7 @@ from allauth.account.models import EmailAddress
 from django.db import transaction
 from rolepermissions.roles import assign_role
 
+from apps.users.filters import UserFilterSchema  # noqa: TC001
 from apps.users.schemas import UserCreateIn  # noqa: TC001
 
 from .models import User
@@ -31,3 +32,9 @@ class UsersService:
         transaction.on_commit(lambda: send_verification_email.delay(email_address.pk))
 
         return user
+
+    def list_users(self, filters: UserFilterSchema | None):
+        users = User.objects.all()
+        if filters:
+            return filters.filter(users)
+        return users
