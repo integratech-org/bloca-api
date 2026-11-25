@@ -1,4 +1,3 @@
-from datetime import datetime  # noqa: TC003
 from enum import StrEnum
 
 from ninja import ModelSchema
@@ -29,8 +28,6 @@ class UserCreateOut(ModelSchema):
 
 
 class UserOut(ModelSchema):
-    date_joined: datetime = Field(description="Date when the user joined")
-
     class Meta:
         model = User
         fields = [
