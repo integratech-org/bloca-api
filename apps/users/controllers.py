@@ -36,6 +36,10 @@ class UsersController:
     def get_users(self, filters: Query[UserFilterSchema]):
         return self.users_service.list_users(filters)
 
+    @route.get("/{user_id}/", response={200: UserOut})
+    def get_user(self, user_id: int):
+        return self.users_service.get_user(user_id)
+
     @route.post("/", response={201: UserCreateOut})
     def create_user(self, payload: UserCreateIn):
         user = self.users_service.create_user(payload)

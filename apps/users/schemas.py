@@ -38,4 +38,5 @@ class UserOut(ModelSchema):
             "last_name",
             "is_active",
             "date_joined",
+            "last_login",
         ]
