@@ -9,24 +9,24 @@ from ninja import FilterSchema
 from .models import Machine
 
 
-class ShowEnum(StrEnum):
-    ACTIVE = "active"
-    DELETED = "deleted"
-    ALL = "all"
+class DeletedEnum(StrEnum):
+    EXCLUDE = "exclude"
+    ONLY = "only"
+    INCLUDE = "include"
 
 
 class MachineFilterSchema(FilterSchema):
-    show: ShowEnum = ShowEnum.ACTIVE
+    deleted: DeletedEnum = DeletedEnum.EXCLUDE
     token_status: Machine.TokenStatus | None = Machine.TokenStatus.ACTIVE
     created_after: Annotated[datetime | None, FilterLookup("created_at__gte")] = None
     created_before: Annotated[datetime | None, FilterLookup("created_at__lte")] = None
 
-    def filter_show(self, value: ShowEnum) -> Q:
-        if value == ShowEnum.ACTIVE:
+    def filter_deleted(self, value: DeletedEnum) -> Q:
+        if value == DeletedEnum.EXCLUDE:
             return Q(deleted_at__isnull=True)
-        if value == ShowEnum.DELETED:
+        if value == DeletedEnum.ONLY:
             return Q(deleted_at__isnull=False)
-        return Q()  # all
+        return Q()  # include
 
     def filter_token_status(self, value: Machine.TokenStatus | None) -> Q:
         if value == Machine.TokenStatus.ACTIVE:

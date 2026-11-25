@@ -13,6 +13,12 @@ class ShowEnum(StrEnum):
     ALL = "all"
 
 
+class DeletedEnum(StrEnum):
+    EXCLUDE = "exclude"
+    ONLY = "only"
+    INCLUDE = "include"
+
+
 class RoleEnum(StrEnum):
     SYSTEM_ADMIN = "system_admin"
     ADMIN = "admin"
@@ -22,6 +28,7 @@ class RoleEnum(StrEnum):
 
 class UserFilterSchema(FilterSchema):
     show: ShowEnum = ShowEnum.ACTIVE
+    deleted: DeletedEnum = DeletedEnum.EXCLUDE
     role: RoleEnum = RoleEnum.ALL
     date_joined_after: Annotated[datetime | None, FilterLookup("date_joined__gte")] = (
         None
@@ -36,6 +43,13 @@ class UserFilterSchema(FilterSchema):
         if value == ShowEnum.INACTIVE:
             return Q(is_active=False)
         return Q()  # all
+
+    def filter_deleted(self, value: DeletedEnum) -> Q:
+        if value == DeletedEnum.EXCLUDE:
+            return Q(deleted_at__isnull=True)
+        if value == DeletedEnum.ONLY:
+            return Q(deleted_at__isnull=False)
+        return Q()  # include
 
     def filter_role(self, value: RoleEnum) -> Q:
         if value == RoleEnum.SYSTEM_ADMIN:
