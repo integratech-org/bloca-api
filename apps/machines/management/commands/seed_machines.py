@@ -29,5 +29,5 @@ class Command(BaseCommand):
             raise CommandError(msg) from exc
 
         self.stdout.write(
-            self.style.SUCCESS(f"■ Successfully seeded {options['count']} machines.")
+            self.style.SUCCESS(f"■ Successfully seeded {count} machines.")
         )
