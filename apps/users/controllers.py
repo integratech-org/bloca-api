@@ -1,10 +1,20 @@
 from injector import inject
+from ninja import Query  # noqa: TC002
 from ninja.responses import Status
 from ninja_extra import api_controller
+from ninja_extra import paginate
 from ninja_extra import route
+from ninja_extra.ordering import Ordering
+from ninja_extra.ordering import ordering
+from ninja_extra.pagination import PageNumberPaginationExtra
+from ninja_extra.pagination import PaginatedResponseSchema
+from ninja_extra.searching import Searching
+from ninja_extra.searching import searching
 
+from .filters import UserFilterSchema  # noqa: TC001
 from .schemas import UserCreateIn
 from .schemas import UserCreateOut
+from .schemas import UserOut
 from .services import UsersService  # noqa: TC001
 
 
@@ -13,6 +23,18 @@ class UsersController:
     @inject
     def __init__(self, users_service: UsersService):
         self.users_service = users_service
+
+    @route.get("/", response=PaginatedResponseSchema[UserOut])
+    @paginate(PageNumberPaginationExtra, page_size=25)
+    @ordering(
+        Ordering,
+        ordering_fields=["email", "first_name", "last_name", "date_joined"],
+    )
+    @searching(
+        Searching, search_fields=["email", "first_name", "last_name", "username"]
+    )
+    def get_users(self, filters: Query[UserFilterSchema]):
+        return self.users_service.list_users(filters)
 
     @route.post("/", response={201: UserCreateOut})
     def create_user(self, payload: UserCreateIn):
