@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 from django.core.management.base import CommandParser
+from django.db import transaction
 
 from apps.machines.factories import MachineFactory
 
@@ -23,7 +24,8 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"■ Seeding {count} machines..."))
 
         try:
-            MachineFactory.create_batch(count)
+            with transaction.atomic():
+                MachineFactory.create_batch(count)
         except Exception as exc:
             msg = f"■ Failed to seed machines: {exc}"
             raise CommandError(msg) from exc

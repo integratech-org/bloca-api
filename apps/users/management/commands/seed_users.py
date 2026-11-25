@@ -4,6 +4,7 @@ from allauth.account.models import EmailAddress
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 from django.core.management.base import CommandParser
+from django.db import transaction
 from rolepermissions.roles import assign_role
 
 from apps.users.factories import UserFactory
@@ -32,26 +33,24 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS(f"■ Seeding {count} users..."))
 
+        roles = [Admin, Operator, SystemAdmin]
+
         try:
-            users = UserFactory.create_batch(count)
+            with transaction.atomic():
+                users = UserFactory.create_batch(count)
 
-            roles = [Admin, Operator, SystemAdmin]
-            for user in users:
-                # Set password to last_name (matching your pattern)
-                user.set_password(user.last_name)
-                user.save()
+                for user in users:
+                    user.set_password(user.last_name)
+                    user.save()
 
-                # Create verified email
-                EmailAddress.objects.create(
-                    user=user,
-                    email=user.email,
-                    verified=True,
-                    primary=True,
-                )
+                    EmailAddress.objects.create(
+                        user=user,
+                        email=user.email,
+                        verified=True,
+                        primary=True,
+                    )
 
-                # Assign random role
-                role_class = random.choice(roles)  # noqa: S311
-                assign_role(user, role_class)
+                    assign_role(user, random.choice(roles))  # noqa: S311
 
         except Exception as exc:
             msg = f"■ Failed to seed users: {exc}"
