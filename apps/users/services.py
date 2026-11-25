@@ -1,5 +1,6 @@
 from allauth.account.models import EmailAddress
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from rolepermissions.roles import assign_role
 
 from .filters import UserFilterSchema  # noqa: TC001
@@ -14,6 +15,9 @@ class UsersService:
         if filters:
             return filters.filter(users)
         return users.filter(deleted_at__isnull=True)
+
+    def get_user(self, user_id: int) -> User:
+        return get_object_or_404(User, id=user_id)
 
     @transaction.atomic
     def create_user(self, payload: UserCreateIn) -> User:
