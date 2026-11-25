@@ -30,9 +30,7 @@ class Command(BaseCommand):
             msg = "--count must be at least 1."
             raise CommandError(msg)
 
-        self.stdout.write(
-            self.style.SUCCESS(f"■ Seeding {count} users with random roles...")
-        )
+        self.stdout.write(self.style.SUCCESS(f"■ Seeding {count} users..."))
 
         try:
             users = UserFactory.create_batch(count)
@@ -59,8 +57,4 @@ class Command(BaseCommand):
             msg = f"■ Failed to seed users: {exc}"
             raise CommandError(msg) from exc
 
-        self.stdout.write(
-            self.style.SUCCESS(
-                f"■ Successfully seeded {count} users with random roles."
-            )
-        )
+        self.stdout.write(self.style.SUCCESS(f"■ Successfully seeded {count} users."))
