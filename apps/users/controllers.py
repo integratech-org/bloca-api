@@ -40,6 +40,16 @@ class UsersController:
     def get_user(self, user_id: int):
         return self.users_service.get_user(user_id)
 
+    @route.post("/{user_id}/disable/", response={204: None})
+    def disable_user(self, user_id: int):
+        self.users_service.disable_user(user_id)
+        return Status(204, None)
+
+    @route.post("/{user_id}/enable/", response={204: None})
+    def enable_user(self, user_id: int):
+        self.users_service.enable_user(user_id)
+        return Status(204, None)
+
     @route.post("/", response={201: UserCreateOut})
     def create_user(self, payload: UserCreateIn):
         user = self.users_service.create_user(payload)

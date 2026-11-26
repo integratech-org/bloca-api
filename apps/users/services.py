@@ -19,6 +19,16 @@ class UsersService:
     def get_user(self, user_id: int) -> User:
         return get_object_or_404(User, id=user_id)
 
+    def disable_user(self, user_id: int) -> None:
+        user = get_object_or_404(User, id=user_id)
+        user.is_active = False
+        user.save(update_fields=["is_active", "updated_at"])
+
+    def enable_user(self, user_id: int) -> None:
+        user = get_object_or_404(User, id=user_id)
+        user.is_active = True
+        user.save(update_fields=["is_active", "updated_at"])
+
     @transaction.atomic
     def create_user(self, payload: UserCreateIn) -> User:
         user = User.objects.create_user(
