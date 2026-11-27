@@ -25,6 +25,12 @@ class Machine(BaseModel):
     revoked_at = models.DateTimeField(blank=True, null=True, editable=False)
 
     class Meta(BaseModel.Meta):
+        permissions = [
+            ("restore_machine", "Can restore deleted machine"),
+            ("issue_machine_token", "Can issue machine token"),
+            ("revoke_machine_token", "Can revoke machine token"),
+            ("stream_machine", "Can stream machine events"),
+        ]
         constraints = [
             models.UniqueConstraint(
                 fields=["name"],
