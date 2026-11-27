@@ -28,6 +28,8 @@ class UserCreateOut(ModelSchema):
 
 
 class UserOut(ModelSchema):
+    role: RoleEnum | None = None
+
     class Meta:
         model = User
         fields = [

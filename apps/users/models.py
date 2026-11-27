@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from rolepermissions.roles import get_user_roles
 
 from apps.common.models import BaseModel
 
@@ -23,3 +24,10 @@ class User(BaseModel, AbstractUser):  # pyright: ignore[reportIncompatibleVariab
 
     def __str__(self):
         return self.email
+
+    @property
+    def role(self) -> str | None:
+        roles = get_user_roles(user=self)
+        if roles:
+            return roles[0].get_name()
+        return None
