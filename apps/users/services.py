@@ -44,6 +44,9 @@ class UsersService:
 
     @transaction.atomic
     def create_user(self, payload: UserCreateIn) -> User:
+        if User.objects.all_with_deleted().filter(email__iexact=payload.email).exists():  # pyright: ignore[reportAttributeAccessIssue]
+            raise HttpError(409, "User with this email already exists.")
+
         user = User.objects.create_user(
             username=payload.email,
             email=payload.email,
