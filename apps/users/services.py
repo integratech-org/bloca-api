@@ -1,5 +1,7 @@
 from allauth.account.models import EmailAddress
+from django.db import IntegrityError
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from ninja.errors import HttpError
 from rolepermissions.roles import assign_role
 
@@ -15,6 +17,30 @@ class UsersService:
         if filters:
             return filters.filter(users)
         return users.filter(deleted_at__isnull=True)
+
+    def get_user(self, user_id: int) -> User:
+        return get_object_or_404(User, id=user_id)
+
+    def disable_user(self, user_id: int) -> None:
+        user = get_object_or_404(User, id=user_id)
+        user.is_active = False
+        user.save(update_fields=["is_active", "updated_at"])
+
+    def enable_user(self, user_id: int) -> None:
+        user = get_object_or_404(User, id=user_id)
+        user.is_active = True
+        user.save(update_fields=["is_active", "updated_at"])
+
+    def delete_user(self, user_id: int) -> None:
+        get_object_or_404(User, id=user_id).delete()
+
+    def restore_user(self, user_id: int) -> None:
+        user = get_object_or_404(User.objects.deleted_set(), id=user_id)
+        try:
+            with transaction.atomic():
+                user.undelete()
+        except IntegrityError:
+            raise HttpError(409, "User email already in use") from None
 
     @transaction.atomic
     def create_user(self, payload: UserCreateIn) -> User:
